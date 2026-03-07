@@ -4,7 +4,7 @@ import {
   getTicket, updateTicket, deleteTicket,
   assignTicket, updateTicketStatus, updateTicketPriority, updateTicketDueDate,
   getComments, postComment,
-  getAttachments, uploadAttachment, downloadAttachment,
+  getAttachments, uploadAttachment, downloadAttachment,deleteAttachments
 } from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import StatusBadge from '../components/StatusBadge'
@@ -200,7 +200,7 @@ export default function TicketDetail() {
   const remove = async () => {
     if (!confirm('Delete this ticket permanently?')) return
     setDeleting(true)
-    try { await deleteTicket(id); navigate('/dashboard') }
+    try { await deleteTicket(id); await deleteAttachments(id); navigate('/dashboard') }
     catch (e) { showError(e.message); setDeleting(false) }
   }
 

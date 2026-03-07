@@ -1,5 +1,5 @@
-const AUTH_BASE = 'http://localhost:8090/auth'
-const API_BASE  = 'http://localhost:8090/api'
+const AUTH_BASE = 'https://mastercraft-clone.onrender.com/auth'
+const API_BASE  = 'https://mastercraft-clone.onrender.com/api'
 
 const getToken = () => localStorage.getItem('access_token')
 
