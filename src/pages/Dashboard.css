@@ -1,0 +1,154 @@
+.dashboard {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 224px;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+.sidebar__top { display: flex; flex-direction: column; gap: 4px; padding: 0 10px; }
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  /* formal: smaller, uppercase, tracked — not a gaming logo */
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 4px 6px 16px;
+  border-bottom: 1px solid var(--border-muted);
+  margin-bottom: 12px;
+}
+
+.sidebar__create-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  transition: background 0.15s;
+  letter-spacing: 0.01em;
+}
+.sidebar__create-btn span { font-size: 16px; line-height: 1; font-weight: 400; }
+.sidebar__create-btn:hover { background: var(--accent-hover); }
+.sidebar__create-btn:active { opacity: 0.9; }
+
+.sidebar__nav { display: flex; flex-direction: column; gap: 1px; }
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  transition: background 0.1s, color 0.1s;
+  letter-spacing: 0.005em;
+}
+.sidebar__link:hover { background: var(--bg-elevated); color: var(--text-primary); }
+/* active: left border accent instead of full background highlight */
+.sidebar__link--active {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-weight: 500;
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.sidebar__bottom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+.sidebar__user { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; }
+/* formal: solid colour avatar, no gradient */
+.sidebar__avatar {
+  width: 28px; height: 28px;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.sidebar__user-info { display: flex; flex-direction: column; min-width: 0; }
+.sidebar__user-name { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar__user-role { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 1px; }
+
+.sidebar__logout {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 5px;
+  border-radius: var(--radius-sm);
+  transition: background 0.1s, color 0.1s;
+  flex-shrink: 0;
+}
+.sidebar__logout:hover { background: var(--red-dim); color: var(--red); }
+
+/* ── Main ── */
+.dashboard__main {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg-base);
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  min-width: 260px;
+  max-width: 360px;
+  border: 1px solid var(--border);
+}
+.toast--success {
+  background: var(--bg-elevated);
+  border-color: rgba(61,145,98,0.3);
+}
+.toast__icon {
+  width: 20px; height: 20px;
+  background: var(--green-dim);
+  color: var(--green);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+.toast__body { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.toast__title { font-size: 12px; font-weight: 600; color: var(--green); }
+.toast__sub { font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.toast__close {
+  background: transparent; color: var(--text-muted);
+  font-size: 13px; padding: 0 2px;
+  transition: color 0.1s; flex-shrink: 0;
+}
+.toast__close:hover { color: var(--text-primary); }

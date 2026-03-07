@@ -1,0 +1,358 @@
+.admin-dashboard { max-width: 1100px; }
+
+/* ══ Shared block wrapper ══ */
+.admin-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.admin-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-muted);
+}
+.admin-block__header h2 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* ══ Summary strip (shared by both sections) ══ */
+.ticket-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.summary-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.summary-card__value {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.summary-card__label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 500;
+}
+
+/* ══ Status kanban ══ */
+.status-kanban {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.status-lane {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-muted);
+  border-left: 3px solid var(--lane-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+.status-lane:hover { background: var(--bg-overlay); border-color: var(--border); }
+
+.status-lane__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.status-lane__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--lane-color);
+  flex-shrink: 0;
+}
+.status-lane__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+.status-lane__pct {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+.status-lane__count {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--lane-color);
+  min-width: 22px;
+  text-align: right;
+}
+.status-lane__bar {
+  height: 3px;
+  background: var(--bg-overlay);
+  border-radius: 2px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.status-lane__bar-fill {
+  height: 100%;
+  background: var(--lane-color);
+  border-radius: 2px;
+  opacity: 0.65;
+  transition: width 0.4s ease;
+}
+.status-lane__tickets { display: flex; flex-direction: column; gap: 3px; }
+.status-lane__ticket {
+  display: flex; align-items: center; gap: 8px;
+  padding: 2px 0;
+}
+.status-lane__ticket-id {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--text-muted); flex-shrink: 0; min-width: 28px;
+}
+.status-lane__ticket-title {
+  font-size: 12px; color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.status-lane__more {
+  font-size: 11px; color: var(--text-muted);
+  font-style: italic; padding-top: 2px;
+}
+
+/* ══ Pending users grid ══ */
+.pending-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+.pending-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.pending-card__top {
+  display: flex; align-items: center; gap: 10px;
+}
+.pending-card__avatar {
+  width: 28px; height: 28px;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.pending-card__info { display: flex; flex-direction: column; gap: 2px; }
+.pending-card__name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+
+.user-status {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 1px 6px; border-radius: var(--radius-sm);
+}
+.user-status--active     { color: var(--green);  background: var(--green-dim);  }
+.user-status--unverified { color: var(--yellow); background: var(--yellow-dim); }
+
+.pending-card__roles { display: flex; gap: 5px; flex-wrap: wrap; }
+.role-badge {
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: var(--radius-sm);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  border: 1px solid var(--border);
+  color: var(--text-muted); background: var(--bg-base);
+}
+.role-badge--admin { color: var(--red);    background: var(--red-dim);    border-color: rgba(176,58,46,0.2);  }
+.role-badge--dev   { color: var(--accent); background: var(--accent-dim); border-color: rgba(74,134,200,0.2); }
+.role-badge--test  { color: var(--green);  background: var(--green-dim);  border-color: rgba(61,145,98,0.2);  }
+
+.pending-card__actions {
+  display: flex; gap: 6px;
+  border-top: 1px solid var(--border-muted);
+  padding-top: 8px;
+}
+.pending-action {
+  flex: 1; font-size: 11px; font-weight: 500;
+  padding: 5px 0; border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.pending-action:disabled { opacity: 0.4; cursor: not-allowed; }
+.pending-action--approve {
+  color: var(--green); border-color: rgba(61,145,98,0.3); background: var(--green-dim);
+}
+.pending-action--approve:not(:disabled):hover { background: rgba(61,145,98,0.22); }
+.pending-action--reject {
+  color: var(--red); border-color: rgba(176,58,46,0.3); background: var(--red-dim);
+}
+.pending-action--reject:not(:disabled):hover { background: rgba(176,58,46,0.22); }
+
+/* ══ Misc ══ */
+.admin-skeletons { display: flex; flex-direction: column; gap: 6px; }
+.admin-empty {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; padding: 28px 0; color: var(--text-muted);
+}
+.admin-empty span { font-size: 18px; }
+.admin-empty p { font-size: 12px; }
+
+.btn-link {
+  background: transparent; color: var(--accent);
+  font-size: 12px; font-weight: 500; padding: 0;
+  transition: opacity 0.1s;
+}
+.btn-link:hover { opacity: 0.75; }
+
+@media (max-width: 700px) {
+  .ticket-summary-strip { grid-template-columns: 1fr 1fr; }
+  .pending-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Role approval UI ── */
+.pending-card__roles-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-muted);
+}
+.pending-card__roles-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.pending-role-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pending-role-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.role-decision-btns {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.role-decision-btn {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-base);
+  color: var(--text-muted);
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  flex-shrink: 0;
+}
+.role-decision-btn--approve:hover,
+.role-decision-btn--approve.active {
+  background: var(--green-dim);
+  border-color: rgba(61,145,98,0.4);
+  color: var(--green);
+}
+.role-decision-btn--reject:hover,
+.role-decision-btn--reject.active {
+  background: var(--red-dim);
+  border-color: rgba(176,58,46,0.4);
+  color: var(--red);
+}
+.role-decision-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Admin role notice */
+.pending-card__admin-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--bg-base);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+}
+.admin-role-note {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Submit button */
+.pending-submit-btn {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.1s;
+  margin-top: 4px;
+}
+.pending-submit-btn:hover:not(:disabled) { background: rgba(74,134,200,0.2); }
+.pending-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Success toast ── */
+.success-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 3000;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  border: 1px solid rgba(61,145,98,0.35);
+  box-shadow: var(--shadow-md);
+  min-width: 260px;
+  max-width: 420px;
+}
+.success-toast__icon {
+  width: 20px; height: 20px;
+  background: var(--green-dim);
+  color: var(--green);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+.success-toast__body {
+  flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0;
+}
+.success-toast__title { font-size: 12px; font-weight: 600; color: var(--green); }
+.success-toast__msg   { font-size: 12px; color: var(--text-secondary); line-height: 1.5; word-break: break-word; }
+.success-toast__close {
+  background: transparent; color: var(--text-muted);
+  font-size: 13px; padding: 0 2px; transition: color 0.1s; flex-shrink: 0;
+}
+.success-toast__close:hover { color: var(--text-primary); }

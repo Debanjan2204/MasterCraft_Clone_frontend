@@ -1,0 +1,124 @@
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+.modal {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  width: 100%; max-width: 580px;
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal__header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border-muted);
+}
+.modal__header h2 {
+  font-size: 15px; font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+.modal__close {
+  background: transparent; color: var(--text-muted); font-size: 15px;
+  padding: 3px 7px; border-radius: var(--radius-sm);
+  transition: background 0.1s, color 0.1s;
+}
+.modal__close:hover { background: var(--bg-elevated); color: var(--text-primary); }
+
+.modal__form { padding: 18px 22px 22px; display: flex; flex-direction: column; gap: 14px; }
+
+.modal__form .form-field input,
+.modal__form .form-field textarea {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 11px;
+  font-size: 13px;
+  color: var(--text-primary);
+  width: 100%;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.modal__form .form-field input:focus,
+.modal__form .form-field textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-dim);
+  outline: none;
+}
+.modal__form textarea { resize: vertical; line-height: 1.55; }
+
+.modal__row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.modal__row--2 { grid-template-columns: repeat(2, 1fr); }
+
+.modal__footer {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-muted);
+}
+
+@media (max-width: 600px) {
+  .modal__row, .modal__row--2 { grid-template-columns: 1fr; }
+}
+
+/* ── Attachment dropzone ── */
+.label-optional {
+  font-size: 10px; color: var(--text-muted);
+  font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 4px;
+}
+.attach-dropzone {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-base);
+  padding: 14px;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 54px;
+}
+.attach-dropzone:hover { border-color: var(--accent); background: var(--accent-dim); }
+.attach-dropzone--has-files { min-height: 36px; padding: 8px 14px; }
+.attach-dropzone__hint {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--text-muted); font-size: 12px; pointer-events: none;
+}
+.attach-dropzone__icon { font-size: 18px; line-height: 1; }
+.attach-dropzone__add { font-size: 12px; color: var(--accent); }
+
+/* Staged file list */
+.attach-file-list {
+  display: flex; flex-direction: column; gap: 4px; margin-top: 8px;
+}
+.attach-file-row {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+}
+.attach-file-icon { font-size: 14px; flex-shrink: 0; }
+.attach-file-name {
+  flex: 1; font-size: 12px; color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.attach-file-size { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); flex-shrink: 0; }
+.attach-file-remove {
+  background: transparent; color: var(--text-muted); font-size: 12px;
+  padding: 0 2px; transition: color 0.1s; flex-shrink: 0;
+}
+.attach-file-remove:hover { color: var(--red); }
+
+/* Upload progress */
+.upload-progress {
+  font-size: 12px; color: var(--accent);
+  font-family: var(--font-mono);
+  padding: 6px 10px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(74,134,200,0.2);
+  border-radius: var(--radius-sm);
+}
