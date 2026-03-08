@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { STATUSES, PRIORITIES, TYPES } from '../constants'
 import { toInstant } from '../api/client'
 import './CreateTicketModal.css'
-import { useApi } from '../hooks/UseApi'
+import { useApi } from '../hooks/useApi'
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`

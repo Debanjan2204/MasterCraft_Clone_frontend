@@ -4,7 +4,7 @@ import { getTickets } from '../api/client'
 import TicketCard from '../components/TicketCard'
 import { STATUSES, PRIORITIES } from '../constants'
 import './PageLayout.css'
-import { useApi } from '../hooks/UseApi'
+import { useApi } from '../hooks/useApi'
 export default function AllTickets() {
   const { refreshKey = 0 } = useOutletContext() ?? {}
 
