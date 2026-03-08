@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { STATUSES, PRIORITIES, TYPES } from '../constants'
 import { toInstant } from '../api/client'
 import './CreateTicketModal.css'
-
+import { useApi } from '../hooks/UseApi'
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
@@ -24,7 +24,7 @@ function fileIcon(contentType) {
 export default function CreateTicketModal({ onClose, onCreated }) {
   const { user } = useAuth()
   const fileInputRef = useRef(null)
-
+  const api= useApi()
   const [form, setForm] = useState({
     title: '', description: '', type: 'DEFECT', priority: 'MEDIUM', status: 'OPEN',
     assignee: '', dueDate: '', projectId: '',
@@ -74,13 +74,13 @@ export default function CreateTicketModal({ onClose, onCreated }) {
         assigneeUserName: form.assignee || {},
         dueDate:          form.dueDate?toInstant(new Date(form.dueDate).toISOString()):null,
       }
-      const created = await createTicket(payload)
+      const created = await api(createTicket,payload)
 
       // 2. Upload attachments sequentially if any
       if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
           setUploadProgress(`Uploading attachment ${i + 1} of ${files.length}…`)
-          await uploadAttachment(created.id, files[i])
+          await  uploadAttachment(created.id, files[i])
         }
       }
 

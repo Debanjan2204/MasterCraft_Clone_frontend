@@ -1,0 +1,50 @@
+.global-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all; /* blocks all interaction */
+  }
+  
+  /* Semi-transparent dark backdrop */
+  .global-loader__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 12, 18, 0.65);
+    backdrop-filter: blur(2px);
+  }
+  
+  /* Centered spinner card */
+  .global-loader__spinner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px 40px;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  /* Ring spinner */
+  .gl-ring {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: gl-spin 0.7s linear infinite;
+  }
+  @keyframes gl-spin { to { transform: rotate(360deg); } }
+  
+  .gl-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+  }

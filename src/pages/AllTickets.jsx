@@ -4,7 +4,7 @@ import { getTickets } from '../api/client'
 import TicketCard from '../components/TicketCard'
 import { STATUSES, PRIORITIES } from '../constants'
 import './PageLayout.css'
-
+import { useApi } from '../hooks/UseApi'
 export default function AllTickets() {
   const { refreshKey = 0 } = useOutletContext() ?? {}
 
@@ -32,6 +32,7 @@ export default function AllTickets() {
     setSearchParams({})
   }
 
+  const api = useApi()
   const fetchTickets = useCallback(async () => {
     setLoading(true); setError('')
     try {
@@ -39,7 +40,7 @@ export default function AllTickets() {
       if (search)         params.title    = search
       if (filterStatus)   params.status   = filterStatus
       if (filterPriority) params.priority = filterPriority
-      const data = await getTickets(params)
+      const data = await api(getTickets,params)
       setTickets(Array.isArray(data) ? data : data?.content ?? [])
     } catch (e) { setError(e.message) }
     finally { setLoading(false) }

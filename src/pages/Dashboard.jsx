@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import CreateTicketModal from '../components/CreateTicketModal'
+import { pings } from '../api/client'
 import ErrorToast from '../components/ErrorToast'
 import './Dashboard.css'
 
@@ -10,6 +11,13 @@ export default function Dashboard() {
   const navigate = useNavigate()
 
   const isAdmin = user?.roles?.includes('ROLE_ADMIN')
+
+  // ── Keep-alive: ping backend every 15 minutes ──
+  // useEffect(() => {
+  //   ping() // immediate ping on mount
+  //   const interval = setInterval(ping, 15 * 60 * 1000)
+  //   return () => clearInterval(interval)
+  // }, [])
 
   const [showCreate, setShowCreate]   = useState(false)
   const [refreshKey, setRefreshKey]   = useState(0)

@@ -1,5 +1,8 @@
-const AUTH_BASE = 'https://mastercraft-clone.onrender.com/auth'
-const API_BASE  = 'https://mastercraft-clone.onrender.com/api'
+// const AUTH_BASE = 'https://mastercraft-clone.onrender.com/auth'
+// const API_BASE  = 'https://mastercraft-clone.onrender.com/api'
+
+const AUTH_BASE = 'https://mastercraftclone-production.up.railway.app/auth'
+const API_BASE  = 'https://mastercraftclone-production.up.railway.app/api'
 
 const getToken = () => localStorage.getItem('access_token')
 
@@ -170,3 +173,11 @@ export const downloadAttachment = async (id, originalName) => {
   document.body.appendChild(a); a.click(); a.remove()
   URL.revokeObjectURL(url)
 }
+
+// ── Keep-alive ping ───────────────────────────────────────────
+// Hits /api/ping every 15 min to prevent backend from sleeping.
+// Returns 'pong' on success. Fails silently — never shown to user.
+export const pings = () =>
+  fetch(`${API_BASE}/ping`, {
+    headers: getToken() ? { Authorization: `Bearer ${getToken()}` } : {},
+  }).catch(() => {}) // silent fail
