@@ -4,7 +4,8 @@ import {
   getTicket, updateTicket, deleteTicket,
   assignTicket, updateTicketStatus, updateTicketPriority, updateTicketDueDate,
   getComments, postComment,
-  getAttachments, uploadAttachment, downloadAttachment,deleteAttachments
+  getAttachments, uploadAttachment, downloadAttachment,
+  summarizeTicket,
 } from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import StatusBadge from '../components/StatusBadge'
@@ -112,6 +113,11 @@ export default function TicketDetail() {
   const [uploading, setUploading]         = useState(false)
   const attachInputRef = useRef(null)
 
+  const [summary, setSummary]           = useState(null)   // null=not loaded, {}=loaded
+  const [summaryOpen, setSummaryOpen]   = useState(false)
+  const [summaryLoading, setSummaryLoading] = useState(false)
+  const [summaryReady, setSummaryReady] = useState(false)   // true once fetched on mount
+
   const [errorMsg, setErrorMsg] = useState('')
   const showError = (msg) => setErrorMsg(msg || 'An unexpected error occurred.')
 
@@ -142,6 +148,36 @@ export default function TicketDetail() {
       .then(data => setAttachments(Array.isArray(data) ? data : []))
       .catch(e => showError(e.message))
       .finally(() => setAttachLoading(false))
+  }, [id])
+
+  // Fetch summary once per ticket. The ignore flag handles React Strict Mode's
+  // double-invoke — if the effect is cleaned up, we discard the result.
+  useEffect(() => {
+    let ignore = false
+    setSummary(null)
+    setSummaryReady(false)
+    setSummaryLoading(true)
+    summarizeTicket(id)
+      .then(data => {
+        if (ignore) return
+        console.log('[Summary] typeof:', typeof data)
+        console.log('[Summary] raw:', data)
+        let parsed = data
+        if (typeof data === 'string') {
+          try { parsed = JSON.parse(data) } catch(e) { console.error('[Summary] JSON.parse failed:', e) }
+        }
+        console.log('[Summary] parsed:', parsed)
+        console.log('[Summary] Object.entries:', Object.entries(parsed))
+        setSummary(parsed)
+        setSummaryReady(true)
+      })
+      .catch(() => {
+        if (!ignore) setSummaryReady(false)
+      })
+      .finally(() => {
+        if (!ignore) setSummaryLoading(false)
+      })
+    return () => { ignore = true }
   }, [id])
 
   const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
@@ -200,7 +236,7 @@ export default function TicketDetail() {
   const remove = async () => {
     if (!confirm('Delete this ticket permanently?')) return
     setDeleting(true)
-    try { await deleteTicket(id); await deleteAttachments(id); navigate('/dashboard') }
+    try { await deleteTicket(id); navigate('/dashboard') }
     catch (e) { showError(e.message); setDeleting(false) }
   }
 
@@ -226,6 +262,29 @@ export default function TicketDetail() {
       setAttachments(Array.isArray(updated) ? updated : [])
     } catch (err) { showError(err.message) }
     finally { setUploading(false); e.target.value = '' }
+  }
+
+  const handleSummarize = async () => {
+    // Toggle close
+    if (summaryOpen) { setSummaryOpen(false); return }
+
+    // Open panel
+    setSummaryOpen(true)
+
+    // Background fetch already succeeded — nothing to do
+    if (summaryReady) return
+
+    // Background fetch is still running — panel will show shimmer, data will appear when done
+    if (summaryLoading) return
+
+    // Background fetch failed silently — retry now
+    setSummaryLoading(true)
+    try {
+      const data = await summarizeTicket(id)
+      setSummary(data)
+      setSummaryReady(true)
+    } catch (e) { showError(e.message) }
+    finally { setSummaryLoading(false) }
   }
 
   const handleDownload = async (a) => {
@@ -310,6 +369,48 @@ export default function TicketDetail() {
                 {ticket.description || <em style={{ color: 'var(--text-muted)' }}>No description provided.</em>}
               </p>
             )}
+          </div>
+
+
+          {/* ── AI Summary panel ── */}
+          <div className="summary-panel">
+            <div className="summary-panel__trigger" onClick={handleSummarize} role="button" tabIndex={0}
+              onKeyDown={e => e.key === 'Enter' && handleSummarize()}>
+              <span className="summary-panel__trigger-left">
+                <SparkleIcon />
+                <span>AI Summary</span>
+                {summaryReady && !summaryOpen && (
+                  <span className="summary-panel__ready-dot" title="Summary ready" />
+                )}
+              </span>
+              <span className="summary-panel__meta">
+                {summaryLoading
+                  ? <span className="summary-panel__status">Summarizing…</span>
+                  : summaryReady
+                    ? <span className="summary-panel__status summary-panel__status--ready">Ready</span>
+                    : <span className="summary-panel__status">Click to load</span>
+                }
+                <span className={`summary-panel__chevron${summaryOpen ? ' summary-panel__chevron--open' : ''}`}>›</span>
+              </span>
+            </div>
+
+            <div className={`summary-panel__body${summaryOpen ? ' summary-panel__body--open' : ''}`}>
+              {summaryLoading ? (
+                <div className="summary-shimmer">
+                  {[80, 60, 90, 50, 70].map((w, i) => (
+                    <div key={i} className="summary-shimmer__line" style={{ width: `${w}%`, animationDelay: `${i * 0.07}s` }} />
+                  ))}
+                </div>
+              ) : summary && Object.keys(summary).length > 0 ? (
+                <div className="summary-cards">
+                  {Object.entries(summary).map(([key, value], i) => (
+                    <SummaryCard key={key} index={i} label={key} text={value} />
+                  ))}
+                </div>
+              ) : (
+                <p className="summary-panel__empty">Summary unavailable.</p>
+              )}
+            </div>
           </div>
 
           {editing && hasChanges && (
@@ -502,5 +603,44 @@ const IconEdit = () => (
   <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
     <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
     <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+  </svg>
+)
+
+const CARD_STYLES = [
+  { color: 'blue',  icon: '⚖' },
+  { color: 'red',   icon: '⚠' },
+  { color: 'green', icon: '✓' },
+  { color: 'purple', icon: '◈' },
+]
+
+function SummaryCard({ index, label, text }) {
+  if (!text) return null
+  const { color, icon } = CARD_STYLES[index % CARD_STYLES.length]
+
+  // Split on newlines or sentence-start digits for bullet rendering
+  const lines = text
+    .split(/\n|(?=\d+\.\s)/)
+    .map(l => l.trim())
+    .filter(Boolean)
+
+  return (
+    <div className={`summary-card summary-card--${color}`}>
+      <div className="summary-card__header">
+        <span className="summary-card__icon">{icon}</span>
+        <span className="summary-card__label">{label}</span>
+      </div>
+      <ul className="summary-card__list">
+        {lines.map((line, i) => (
+          <li key={i}>{line.replace(/^\d+\.\s*/, '')}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+const SparkleIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
   </svg>
 )

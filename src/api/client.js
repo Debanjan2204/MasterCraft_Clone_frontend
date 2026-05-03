@@ -1,8 +1,11 @@
 // const AUTH_BASE = 'https://mastercraft-clone.onrender.com/auth'
 // const API_BASE  = 'https://mastercraft-clone.onrender.com/api'
 
-const AUTH_BASE = 'https://mastercraftclone-production.up.railway.app/auth'
-const API_BASE  = 'https://mastercraftclone-production.up.railway.app/api'
+// const AUTH_BASE = 'https://mastercraftclone-production.up.railway.app/auth'
+// const API_BASE  = 'https://mastercraftclone-production.up.railway.app/api'
+
+const AUTH_BASE = 'http://localhost:8090/auth'
+const API_BASE  = 'http://localhost:8090/api'
 
 const getToken = () => localStorage.getItem('access_token')
 
@@ -181,3 +184,8 @@ export const pings = () =>
   fetch(`${API_BASE}/ping`, {
     headers: getToken() ? { Authorization: `Bearer ${getToken()}` } : {},
   }).catch(() => {}) // silent fail
+
+  // ── AI Summary ────────────────────────────────────────────────
+export const summarizeTicket = (ticketId) =>
+  request(`${API_BASE}/tickets/summarize-tickets/${ticketId}`)
+ 

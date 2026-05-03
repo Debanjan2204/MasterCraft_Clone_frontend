@@ -11,6 +11,7 @@ const AVAILABLE_ROLES = [
 ]
 
 export default function Landing() {
+  
   const { login, isAuthenticated } = useAuth()
   const navigate = useNavigate()
 

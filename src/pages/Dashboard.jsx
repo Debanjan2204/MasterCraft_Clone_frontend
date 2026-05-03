@@ -13,11 +13,11 @@ export default function Dashboard() {
   const isAdmin = user?.roles?.includes('ROLE_ADMIN')
 
   // ── Keep-alive: ping backend every 15 minutes ──
-  // useEffect(() => {
-  //   ping() // immediate ping on mount
-  //   const interval = setInterval(ping, 15 * 60 * 1000)
-  //   return () => clearInterval(interval)
-  // }, [])
+  useEffect(() => {
+    pings() // immediate ping on mount
+    const interval = setInterval(pings,  60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   const [showCreate, setShowCreate]   = useState(false)
   const [refreshKey, setRefreshKey]   = useState(0)

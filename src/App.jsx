@@ -9,6 +9,8 @@ import AllTickets          from './pages/AllTickets'
 import MyTickets           from './pages/MyTickets'
 import TicketDetail        from './pages/TicketDetail'
 import ReportedTickets     from './pages/ReportedTickets'
+import { pings } from './api/client'
+import { useEffect } from 'react'
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth()
@@ -21,6 +23,12 @@ function DefaultDashboard() {
 }
 
 export default function App() {
+    // ── Keep-alive: ping backend every 15 minutes ──
+    useEffect(() => {
+      pings() // immediate ping on mount
+      const interval = setInterval(pings,  60 * 1000)
+      return () => clearInterval(interval)
+    }, [])
   return (
     <AuthProvider>
       <LoadingProvider>
