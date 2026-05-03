@@ -26,7 +26,7 @@ export default function App() {
     // ── Keep-alive: ping backend every 15 minutes ──
     useEffect(() => {
       pings() // immediate ping on mount
-      const interval = setInterval(pings,  60 * 1000)
+      const interval = setInterval(pings,  14 * 60 * 1000)
       return () => clearInterval(interval)
     }, [])
   return (
